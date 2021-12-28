@@ -26,12 +26,14 @@ class Employee:
         self.jobs = []
         self.mechanic_notes = []
 
+    # Method to query the database to create a new employee belonging to a shop
     @classmethod
     def add_employee(cls, data):
         query = "INSERT INTO employees (first_name, last_name, position, password, admin, shop_id, created_at, updated_at) VALUES (%(first_name)s, %(last_name)s, %(position)s, %(password)s, %(admin)s, 1, NOW(), NOW())"
         results = connectToMySQL(cls.database_name).query_db(query,data)
         return results
     
+    # Method to query the databse to retrieve an employee's information, including information about the shop they are employed by
     @classmethod
     def get_by_id(cls, data):
         query = "SELECT * FROM employees LEFT JOIN shops ON shops.id = shop_id WHERE employees.id=%(employee_id)s AND shop_id=%(shop_id)s;"
@@ -47,6 +49,7 @@ class Employee:
         employee.shop = shop.Shop(shop_data)
         return employee
 
+    # Method to query the database to retrieve a list of all employees
     @classmethod
     def get_employees(cls, data):
         query = "SELECT * FROM employees WHERE shop_id=%(shop_id)s"
@@ -56,6 +59,7 @@ class Employee:
             employees.append(cls(employee))
         return employees
     
+    # Method to query the database to get a list of all of a specific mechanic's open jobs, including the customer and car the job belongs to.
     @classmethod
     def get_mechanic_open_jobs(cls, data):
         query = '''SELECT * FROM employees
@@ -99,6 +103,7 @@ class Employee:
             mechanic.jobs.append(mechanic_job)
         return mechanic
 
+    # A method to validate employee registration, done before the database is queried to actually add the employee to the database
     @classmethod
     def validate_registration(cls, data):
         is_valid = True

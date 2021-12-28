@@ -12,6 +12,7 @@ class Part:
         self.created_at = data["created_at"]
         self.updated_at = data["updated_at"]
 
+    # Query the database to get a list of all parts per category
     @classmethod
     def get_parts(cls):
         query = "SELECT * FROM parts ORDER BY category;"
@@ -29,30 +30,35 @@ class Part:
         parts.append(parts_in_category)
         return parts
 
+    # Query the database to create a new part
     @classmethod
     def create_part(cls, data):
         query = "INSERT INTO parts (part_name, quantity, price, category, created_at, updated_at) VALUES (%(part_name)s, %(quantity)s, %(price)s, %(category)s, NOW(), NOW())"
         results = connectToMySQL(cls.database_name).query_db(query, data)
         return results
 
+    # Query the database to remove a part from its associated service
     @classmethod
     def delete_part_from_service(cls, data):
         query = "DELETE FROM services_have_parts WHERE part_id = %(part_id)s AND service_id = %(service_id)s;"
         results = connectToMySQL(cls.database_name).query_db(query, data)
         return results
 
+    # Query the database to add a part to a service (the services_have_parts) table
     @classmethod
     def add_part_to_service(cls, data):
         query = "INSERT INTO services_have_parts (created_at, updated_at, part_id, service_id) VALUES (NOW(), NOW(), %(part_id)s, %(service_id)s);"
         results = connectToMySQL(cls.database_name).query_db(query, data)
         return results
     
+    # Query the database to delete a part
     @classmethod
     def delete_part(cls, data):
         query = "DELETE FROM parts WHERE id=%(part_id)s"
         results = connectToMySQL(cls.database_name).query_db(query, data)
         return results
 
+    # Query the database to get a list of parts required by a job.
     @classmethod
     def get_job_parts(cls, data):
         query = '''SELECT * FROM parts

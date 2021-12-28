@@ -17,13 +17,14 @@ class Job:
         self.mechanic = {}
         self.car = {}
 
+    # Query the database to create a job that belongs to a car and mechanic
     @classmethod
     def create_job(cls, data):
         query = "INSERT INTO jobs (comments, status, created_at, updated_at, mechanic_id, car_id) VALUES (%(comments)s, 'Not Started', NOW(), NOW(), %(mechanic_id)s, %(car_id)s)"
         results = connectToMySQL(cls.database_name).query_db(query, data)
         return results
 
-
+    # Query the database to add a new line in the jobs_have_services table for every service that needs to be added to a job
     @classmethod
     def add_services_to_job(cls, data):
         for service in data["services"]:
@@ -35,18 +36,21 @@ class Job:
             results = connectToMySQL(cls.database_name).query_db(query, new_data)
         return results
 
+    # Query the database to add a single new service for a job, to the jobs_have_services table
     @classmethod
     def add_service_to_job(cls, data):
         query = "INSERT INTO jobs_have_services (created_at, updated_at, job_id, service_id) VALUES (NOW(), NOW(), %(job_id)s, %(service_id)s);"
         results = connectToMySQL(cls.database_name).query_db(query, data)
         return results
 
+    # Query the database to update just the status of a particular job
     @classmethod
     def update_status(cls, data):
         query = "UPDATE jobs SET status=%(status)s, updated_at=NOW() WHERE id=%(job_id)s;"
         results = connectToMySQL(cls.database_name).query_db(query, data)
         return results
 
+    # Query the database to get all of the job information, including all of the services on the job, the parts associated with those services, the car details, the customer details, and the lead mechanic's details
     @classmethod
     def get_job(cls, data):
         query = '''SELECT * FROM jobs
@@ -99,6 +103,7 @@ class Job:
         return job
 
 
+    # Query the database to get a list of all open jobs, including the car data, the owner data, and the mechanic's data
     @classmethod
     def get_open_jobs(cls):
         query = '''SELECT * FROM jobs

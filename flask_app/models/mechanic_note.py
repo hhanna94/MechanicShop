@@ -15,12 +15,14 @@ class Note:
 
         self.mechanic = {}
 
+    # Query the database to create a new note for a particular job, written by a particular employee. Belonging to a particular car.
     @classmethod
     def create_note(cls, data):
         query = "INSERT INTO mechanic_notes (content, contacted_customer, created_at, updated_at, employees_id, job_id, car_id) VALUES (%(content)s, 'N', NOW(), NOW(), %(employees_id)s, %(job_id)s, %(car_id)s);"
         results = connectToMySQL(cls.database_name).query_db(query, data)
         return results
 
+    # Query the database to get a list of mechanic notes that belong to a certain job, including details about the mechanic who wrote the note
     @classmethod
     def get_job_notes(cls, data):
         query = "SELECT * FROM mechanic_notes LEFT JOIN employees ON employees.id = mechanic_notes.employees_id WHERE job_id=%(job_id)s;"
@@ -43,6 +45,7 @@ class Note:
             notes.append(note)
         return notes
 
+    # Query the database to get a list of all mechanic notes that belong to a certain car, including details about the mechanic
     @classmethod
     def get_all_car_notes(cls, data):
         query = "SELECT * FROM mechanic_notes LEFT JOIN employees ON employees.id = mechanic_notes.employees_id WHERE car_id = %(car_id)s ORDER BY mechanic_notes.created_at DESC"

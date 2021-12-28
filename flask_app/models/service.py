@@ -13,6 +13,7 @@ class Service:
 
         self.parts = []
 
+    # Query the database to get a list of all services
     @classmethod
     def get_services(cls):
         query = "SELECT * FROM services;"
@@ -22,6 +23,7 @@ class Service:
             services.append(cls(service))
         return services
 
+    # Query the database to get details about a service, including all of the parts associated with that service
     @classmethod
     def get_service(cls, data):
         query = '''SELECT * FROM services
@@ -43,6 +45,7 @@ class Service:
             service.parts.append(part.Part(part_data))
         return service
 
+    # Query the database to get a list of services that have not yet been added to a particular job
     @classmethod
     def get_other_services(cls, data):
         query = '''SELECT * FROM services WHERE id NOT IN (
@@ -56,12 +59,14 @@ class Service:
             services.append(cls(row))
         return services
 
+    # Query the database to create a new service
     @classmethod
     def create_service(cls, data):
         query = "INSERT INTO services (service_name, description, price, created_at, updated_at) VALUES (%(service_name)s, %(description)s, %(price)s, NOW(), NOW())"
         results = connectToMySQL(cls.database_name).query_db(query, data)
         return results
 
+    # Query the database to add parts to the services_have_parts table to create the association between a service and its required parts
     @classmethod
     def add_parts_to_service(cls, data):
         for part in data["parts"]:
@@ -73,12 +78,14 @@ class Service:
             results = connectToMySQL(cls.database_name).query_db(query, new_data)
         return results
 
+    # Query the database to update a service
     @classmethod
     def update_service(cls, data):
         query = "UPDATE services SET service_name=%(service_name)s, price=%(price)s, description=%(description)s, updated_at = NOW() WHERE id=%(service_id)s;"
         results = connectToMySQL(cls.database_name).query_db(query, data)
         return results
 
+    # Query the database to delete a servicee
     @classmethod
     def delete_service(cls, data):
         query = "DELETE FROM services WHERE id=%(service_id)s"

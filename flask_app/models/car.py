@@ -18,12 +18,14 @@ class Car:
         self.mechanic_notes = []
         self.owner = {}
 
+    # Method to query the MySQL database, adding the car into the database.
     @classmethod
     def create_car(cls, data):
         query = "INSERT INTO cars (year, make, model, trim, color, created_at, updated_at, customer_id) VALUES (%(year)s, %(make)s, %(model)s, %(trim)s, %(color)s, NOW(), NOW(), %(customer_id)s)"
         results = connectToMySQL(cls.database_name).query_db(query,data)
         return results
 
+    # Method to query the database for all the details of a car. This includes the owner of the car, a list of all the jobs with all job information, including the lead mechanic
     @classmethod
     def get_car(cls, data):
         query = '''SELECT * FROM cars 

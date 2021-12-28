@@ -13,6 +13,7 @@ class Shop:
         self.employees = []
         self.customers = []
 
+    # Query the database to get a list of shops.
     @classmethod
     def get_shops(cls):
         query = "SELECT * FROM shops;"
