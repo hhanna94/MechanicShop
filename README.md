@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ## Table of Contents
 * [Background](#Background)
 * [Features](#Features)
