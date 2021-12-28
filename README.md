@@ -27,7 +27,7 @@ ___
 
     * View all customers and add a new customer
 
-    <img src="./screenshots/All Customers.PNG" alt="All Customers Page" width="300">  
+    <img src="./screenshots/AllCustomers.PNG" alt="All Customers Page" width="300">  
 
     * View a customer and their cars, and add a new car
 
