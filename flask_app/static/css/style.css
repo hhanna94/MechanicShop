@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Georama:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    font-family: 'Georama', sans-serif;
+}
+
+.bg-light-champagne, body {
+    background-color: #FBF7EF;
+}
+
+a {
+    color: #1A936F;
+}
+
+a:hover {
+    color: #147256;
+}
+
+.btn {
+    background-color: #c6dabf;
+    color: #1A936F;
+    font-weight: bold;
+    border: none;
+    box-shadow: 2px 2px 2px #afdbb8;
+}
+
+.btn:hover {
+    background-color: #AFCBA4;
+    color: #1A936F;
+    box-shadow: -1px -1px 2px #afdbb8;
+}
+
+
+/* Font */
+.dark-green {
+    color: #0f5741;
+    text-align: center;
+}
+
+nav {
+    background-color: #1EAE83;
+    color: white;
+    box-shadow: 2px 2px 1px #0f5741;
+}
+
+.hide {
+    display: none;
+}
+

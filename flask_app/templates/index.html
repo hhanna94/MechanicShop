@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/css/style.css') }}">
+
+    <title>Login</title>
+</head>
+<body>
+    <div class="d-flex bg-light-champagne vh-100 dark-green">
+        <div class="container w-50 mt-5">
+            <h1 class="text-center">Welcome to Mechanic Shop!</h1>
+            <p class="text-center mt-4">Please login to continue! If you are a customer, please visit our website <a href="/">here.</a></p>
+            <form class="container w-50 mt-5" action="/login" method="post">
+            {% with login_errors = get_flashed_messages(category_filter=["login"]) %}
+                {% if login_errors %}
+                    {% for message in login_errors %}
+                        <div class="alert alert-danger border border-danger">
+                            <p>{{message}}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+                <div class="mb-3 d-flex">
+                    <label for="shop_num" class="form-label col-6 fw-bold">Shop Name:</label>
+                    <select name="shop_num" id="shop_num" class="w-100">
+                        {% for shop in shops %}
+                        <option value="{{shop.id}}">{{shop.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3 d-flex">
+                    <label for="employee_num" class="form-label col-6 fw-bold">Employee Number:</label>
+                    <input type="number" class="form-control " name="employee_num" required>
+                </div>
+                <div class="mb-4 d-flex">
+                    <label for="password" class="form-label col-6 fw-bold">Password:</label>
+                    <input type="password" class="form-control" name="password" required>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <input class="btn" type="submit" value="Login">
+                </div>
+            </form>
+        </div>
+    </div>
+    
+</body>
+</html>

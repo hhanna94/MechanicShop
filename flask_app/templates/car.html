@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/css/style.css') }}">
+
+    <script type="text/javascript" src="http://www.carqueryapi.com/js/jquery.min.js"></script>
+    <script type="text/javascript" src="http://www.carqueryapi.com/js/carquery.0.3.4.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='script.js')}}"></script>
+
+    <title >Car Details</title>
+</head>
+<body onload="getCarData({{car.trim}})">
+    <nav class="navbar">
+        <div class="container-fluid px-4">
+            <h2>{{car.owner.first_name}} {{car.owner.last_name}}'s {{car.year}} {{car.make.capitalize()}} {{car.model}}</h2>
+            <div class="d-flex gap-5 align-items-center">
+                <a href="/customers/{{car.owner.id}}" class="btn">Go Back</a>
+                {% if session["admin"] == "Y" %}
+                <a class="btn" href="/admin">Admin</a>
+                {% endif %}
+                <a class="btn" href="/dashboard">Dashboard</a>
+                <a class="btn" href="/customers">Customers</a>
+                <a class="btn" href="/parts">Parts</a>
+                <a class="btn" href="/services">Services</a>
+                <a class="btn" href="/return">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <div class="d-flex justify-content-center bg-light-champagne p-0">
+        <div class="w-75 mx-5 px-5 dark-green d-flex justify-content-around py-4">
+            <div class="col-8 pe-5 text-start">
+                <h3>Car Details</h3>
+                <div class="d-flex ps-5 gap-5">
+                    <div>
+                        <p><strong>Year:</strong> {{car.year}}</p>
+                        <p><strong>Make:</strong> {{car.make.capitalize()}}</p>
+                        <p><strong>Model:</strong> {{car.model}}</p>
+                        <p><strong>Color:</strong> {{car.color}}</p>
+                        <p><strong>Trim:</strong> <span id="trim"></span> </p>
+                    </div>
+                    <div>
+                        <p><strong>Engine Location:</strong> <span id="engine_location"></span></p>
+                        <p><strong>Engine Type:</strong> <span id="engine_type"></span></p>
+                        <p><strong>Engine Cylinders:</strong> <span id="cylinders"></span></p>
+                        <p><strong>Drive:</strong> <span id="drive"></span></p>
+                        <p><strong>Transmission:</strong> <span id="transmission"></span></p>
+                    </div>
+                </div>
+                <button onclick="displayNotes()" class="btn mt-4" id="view_notes_button">View Previous Job Notes</button>
+                <div class="mt-3 hide" id="previous_notes">
+                    <h3>Previous Job Notes</h3>
+                    {% if not all_notes %}
+                        <p>No previous notes for this car!</p>
+                    {% endif %}
+                    {% for note in all_notes %}
+                    <div>
+                        <p class="ps-3">{{note.content}}</p>
+                        <p class="ps-5">-{{note.mechanic.first_name}} {{note.created_at.strftime("%m/%d/%Y %I:%M %p")}}</p>
+                    </div>
+                    {% endfor %}
+                    <button class="btn" onclick="hideNotes()">Hide Notes</button>
+                </div>
+                <h3 class="mt-5">Jobs</h3>
+                <table class="table dark-green text-center">
+                    <thead class="fw-bold">
+                        <tr>
+                            <td>Date</td>
+                            <td>ID</td>
+                            <td>Comments</td>
+                            <td>Lead Mechanic</td>
+                            <td>Status</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        {% for job in car.jobs %}
+                        <tr>
+                            <td>{{job.created_at.strftime("%m/%d/%Y")}}</td>
+                            <td>{{job.id}}</td>
+                            <td>{{job.comments}}</td>
+                            <td>{{job.mechanic.first_name}}</td>
+                            <td>{{job.status}}</td>
+                            <td><a class="btn" href="/customers/{{car.owner.id}}/cars/{{car.id}}/jobs/{{job.id}}">View</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div >
+                <h3 class="text-center">Add Job</h3>
+                <form action="/add_job" method="post">
+                    <div class="my-4 d-flex justify-content-between">
+                        <p class="fw-bold">Expected Services:</p>
+                        <div class="d-flex flex-column">
+                            {% for service in all_services %}
+                            <div class="align-self-start">
+                                <input class="form-check-input" type="checkbox" name="services" id="{{service.service_name}}" value="{{service.id}}">
+                                <label for="{{service.service_name}}">{{service.service_name}}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label for="employee_id" class="fw-bold">Lead Mechanic:</label>
+                        <select name="employee_id" id="employee_id" class="form-select w-50">
+                            {% for employee in employees %}
+                            <option value="{{employee.id}}">{{employee.first_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-3 gap-3">
+                        <label for="comments" class="fw-bold">Service Writer Comments:</label>
+                        <textarea name="comments" id="comments" cols="25" rows="5" class="form-control w-50"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <input type="hidden" name="customer_id" value={{car.owner.id}}>
+                        <input type="hidden" name="car_id" value="{{car.id}}">
+                        <input class="btn mt-4" type="submit" value="Add Job">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
