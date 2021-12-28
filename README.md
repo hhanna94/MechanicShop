@@ -119,17 +119,3 @@ I have some future plans for this project. I'd like to implement an inventory ma
 Currently, this is not mobile/tablet friendly. I would like to make version that would be responsive based on screen size since that is extremely important in today's world.
 
 [Return to Table of Contents](#Table-of-Contents)
-=======
-# mechanic_shop
-
-Mechanic Shop:
-The concept behind this project is to have an internal software for a Mechanic Shop so that the owner, admin and mechanics to use to maintain a database of customers, cars and their jobs.
-
-Technologies:
-This web app was built in Python using the Flask framework, and the database is done with MySQL. 
-The styling is done using a mixture of Bootsrap classes and custom classes.
-
-API/External Sources:
-CarQuery API
-CarQuery Module
->>>>>>> b7ad9c51f965a04102f41567ac77f41e7dbc3089
