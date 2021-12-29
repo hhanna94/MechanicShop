@@ -62,15 +62,15 @@ class Car:
             else:
                 continue
             mechanic_data = {
-                "id": results[0]['employees.id'],
-                "first_name": results[0]['employees.first_name'],
-                "last_name": results[0]['employees.last_name'],
-                "position": results[0]["position"],
+                "id": row['employees.id'],
+                "first_name": row['employees.first_name'],
+                "last_name": row['employees.last_name'],
+                "position": row["position"],
                 "password": "not available",
-                "admin": results[0]["admin"],
-                "created_at": results[0]['employees.created_at'],
-                "updated_at": results[0]['employees.updated_at'],
-                "shop_id": results[0]['employees.shop_id'],
+                "admin": row["admin"],
+                "created_at": row['employees.created_at'],
+                "updated_at": row['employees.updated_at'],
+                "shop_id": row['employees.shop_id'],
             }
             one_job.mechanic = employee.Employee(mechanic_data)
             car.jobs.append(one_job)
